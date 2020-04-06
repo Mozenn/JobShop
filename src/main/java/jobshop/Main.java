@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-import jobshop.solvers.BasicSolver;
-import jobshop.solvers.RandomSolver;
+import jobshop.solvers.*;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -24,6 +23,12 @@ public class Main {
         solvers = new HashMap<>();
         solvers.put("basic", new BasicSolver());
         solvers.put("random", new RandomSolver());
+        solvers.put("SPT",new GreedySPTSolver());
+        solvers.put("LPT",new GreedyLPTSolver());
+        solvers.put("LRPT",new GreedyLRPTSolver());
+        solvers.put("SRPT",new GreedySRPTSolver());
+        solvers.put("t_SPT",new GreedyT_SPTSolver());
+        solvers.put("t_LRPT",new GreedyT_LRPTSolver());
         // add new solvers here
     }
 

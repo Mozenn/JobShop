@@ -9,11 +9,13 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class EncodingTests {
 
+
     @Test
-    public void testJobNumbers() throws IOException {
+    public void testJobNumbersToSchedule() throws IOException {
         Instance instance = Instance.fromFile(Paths.get("instances/aaa1"));
 
         // numéro de jobs : 1 2 2 1 1 2 (cf exercices)
@@ -26,9 +28,8 @@ public class EncodingTests {
         enc.jobs[enc.nextToSet++] = 1;
 
         Schedule sched = enc.toSchedule();
-        // TODO: make it print something meaningful
         // by implementing the toString() method
-        System.out.println(sched);
+        //System.out.println(sched);
         assert sched.isValid();
         assert sched.makespan() == 12;
 
@@ -47,6 +48,100 @@ public class EncodingTests {
         assert sched.isValid();
         assert sched.makespan() == 14;
     }
+
+    @Test
+    public void testJobNumberFromSchedule() throws IOException {
+        Instance instance = Instance.fromFile(Paths.get("instances/aaa1"));
+
+        // numéro de jobs : 1 2 2 1 1 2 (cf exercices)
+        JobNumbers enc = new JobNumbers(instance);
+        enc.jobs[enc.nextToSet++] = 0;
+        enc.jobs[enc.nextToSet++] = 1;
+        enc.jobs[enc.nextToSet++] = 1;
+        enc.jobs[enc.nextToSet++] = 0;
+        enc.jobs[enc.nextToSet++] = 0;
+        enc.jobs[enc.nextToSet++] = 1;
+
+        Schedule sched = enc.toSchedule();
+
+        JobNumbers j = new JobNumbers(instance) ;
+        j.fromSchedule(sched);
+        Schedule sched2 = j.toSchedule();
+        /*System.out.println(Arrays.toString(j.jobs));
+        System.out.println(Arrays.toString(enc.jobs));
+        System.out.println(Arrays.toString(j.jobs)); */
+
+        assert sched.makespan() == sched2.makespan() ;
+    }
+
+    @Test
+    public void testResourceOrderToSchedule() throws IOException {
+        Instance instance = Instance.fromFile(Paths.get("instances/aaa1"));
+
+
+        ResourceOrder enc = new ResourceOrder(instance);
+        enc.resources[0][0] = new Task(0,0) ;
+        enc.resources[0][1] = new Task(1,1) ;
+        enc.resources[1][0] = new Task(1,0) ;
+        enc.resources[1][1] = new Task(0,1) ;
+        enc.resources[2][0] = new Task(0,2) ;
+        enc.resources[2][1] = new Task(1,2) ;
+
+
+        Schedule sched = enc.toSchedule();
+        //System.out.println(sched);
+        assert sched.isValid();
+        assert sched.makespan() == 12;
+
+    }
+
+    @Test
+    public void testResourceOrderFromSchedule() throws IOException {
+        Instance instance = Instance.fromFile(Paths.get("instances/aaa1"));
+
+
+        ResourceOrder enc = new ResourceOrder(instance);
+        enc.resources[0][0] = new Task(0,0) ;
+        enc.resources[0][1] = new Task(1,1) ;
+        enc.resources[1][0] = new Task(1,0) ;
+        enc.resources[1][1] = new Task(0,1) ;
+        enc.resources[2][0] = new Task(0,2) ;
+        enc.resources[2][1] = new Task(1,2) ;
+
+
+        Schedule sched = enc.toSchedule();
+
+        ResourceOrder r = new ResourceOrder(instance) ;
+        r.fromSchedule(sched);
+
+        assert Arrays.deepEquals(r.resources,enc.resources) ;
+    }
+
+    @Test
+    public void testJobNumbersToResourceOrder() throws IOException {
+        Instance instance = Instance.fromFile(Paths.get("instances/aaa1"));
+
+        // numéro de jobs : 1 2 2 1 1 2 (cf exercices)
+        JobNumbers enc = new JobNumbers(instance);
+        enc.jobs[enc.nextToSet++] = 0;
+        enc.jobs[enc.nextToSet++] = 1;
+        enc.jobs[enc.nextToSet++] = 1;
+        enc.jobs[enc.nextToSet++] = 0;
+        enc.jobs[enc.nextToSet++] = 0;
+        enc.jobs[enc.nextToSet++] = 1;
+
+        Schedule sched = enc.toSchedule();
+
+        ResourceOrder r = new ResourceOrder(instance);
+        r.fromSchedule(sched);
+        Schedule sched2 = r.toSchedule();
+
+        assert sched.isValid();
+        assert sched2.isValid();
+        assert sched.makespan() == sched2.makespan();
+
+    }
+
 
     @Test
     public void testBasicSolver() throws IOException {

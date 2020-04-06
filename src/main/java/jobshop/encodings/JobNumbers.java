@@ -3,14 +3,16 @@ package jobshop.encodings;
 import jobshop.Encoding;
 import jobshop.Instance;
 import jobshop.Schedule;
+import jobshop.utility.SortByStartTime;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /** Représentation par numéro de job. */
 public class JobNumbers extends Encoding {
 
     /** A numJobs * numTasks array containing the representation by job numbers. */
-    public final int[] jobs;
+    public int[] jobs;
 
     /** In case the encoding is only partially filled, indicates the index of first
      * element of `jobs` that has not been set yet. */
@@ -48,6 +50,29 @@ public class JobNumbers extends Encoding {
         }
 
         return new Schedule(instance, startTimes);
+    }
+
+    @Override
+    public void fromSchedule(Schedule schedule)
+    {
+        ArrayList<Task> tasks = new ArrayList<>() ;
+
+        for(int job = 0 ; job < instance.numJobs ; job++){
+
+            for(int task = 0 ; task < instance.numTasks ; task++){
+
+                Task currentTask = new Task(job,task) ;
+
+                tasks.add(currentTask) ;
+            }
+        }
+
+        tasks.sort(new SortByStartTime(schedule));
+
+        int[] sortedJobs = tasks.stream().mapToInt( task ->  task.job).toArray() ;
+
+        this.jobs = Arrays.copyOf(sortedJobs,sortedJobs.length) ; // TODO loop, fill 1 by one and make jobs final again
+
     }
 
     @Override

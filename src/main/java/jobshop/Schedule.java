@@ -17,6 +17,24 @@ public class Schedule {
         }
     }
 
+    @Override
+    public String toString(){
+
+        StringBuilder sb = new StringBuilder() ;
+
+        for(int j = 0 ; j <times.length ; j++){
+
+            sb.append("Job "+ j + " : \n") ;
+
+            for(int i = 0 ; i < times[j].length ; i++){
+
+                sb.append("   Task "+ i + " Start Time :" + times[j][i] + "\n") ;
+            }
+        }
+
+        return sb.toString() ;
+    }
+
     public int startTime(int job, int task) {
         return times[job][task];
     }

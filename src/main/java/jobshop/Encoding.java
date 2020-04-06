@@ -9,4 +9,6 @@ public abstract class Encoding {
     }
 
     public abstract Schedule toSchedule();
+
+    public abstract void fromSchedule(Schedule schedule) ;
 }
