@@ -3,14 +3,16 @@ package jobshop.encodings;
 import jobshop.Encoding;
 import jobshop.Instance;
 import jobshop.Schedule;
-import jobshop.utility.SortByStartTime;
+
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class ResourceOrder extends Encoding {
 
     public final Task resources[][] ;
 
+    /* Indicate the current start time for each machine*/
     public int[] nextFreeTimeResource ;
 
     public ResourceOrder(Instance instance) {
@@ -26,6 +28,7 @@ public class ResourceOrder extends Encoding {
         Arrays.fill(nextFreeTimeResource,0) ;
     }
 
+    /* plan a task for a given machine at the smallest rank available*/
     public void addTask(Task task, int machine) {
 
         for (int rank = 0; rank < resources[machine].length; rank++) {
@@ -48,8 +51,6 @@ public class ResourceOrder extends Encoding {
 
         Arrays.fill(this.nextFreeTimeResource,0) ;
 
-        //BiFunction<Integer[][],Task,Boolean> isExecuted = (Integer[][] times, Task task) -> times[task.job][task.task] != -1 ;
-
         boolean bDone = false ;
 
         while(!bDone){
@@ -62,9 +63,9 @@ public class ResourceOrder extends Encoding {
 
                     Task currentTask = this.resources[machine][order] ;
 
-                    if(!isExecutedTemp(startTimes,currentTask)){
+                    if(!isTaskExecuted(startTimes,currentTask)){
 
-                        if(order == 0 || isExecutedTemp(startTimes,this.resources[machine][order-1])){ // if predecessor on resource is executed
+                        if(order == 0 || isTaskExecuted(startTimes,this.resources[machine][order-1])){ // if predecessor on resource is executed
 
                             if(currentTask.task == 0 || startTimes[currentTask.job][currentTask.task-1] != -1){ // if predecessor on Job is executed
                                 bDone = false ;
@@ -86,7 +87,7 @@ public class ResourceOrder extends Encoding {
         return new Schedule(instance, startTimes);
     }
 
-    private boolean isExecutedTemp(int[][] startTimes, Task task){ // TODO change this to lambda
+    private boolean isTaskExecuted(int[][] startTimes, Task task){
         return startTimes[task.job][task.task] != -1 ;
     }
 
@@ -106,7 +107,10 @@ public class ResourceOrder extends Encoding {
         }
 
         for(int machine = 0 ; machine < tasks.length ; machine++){
-            Arrays.sort(tasks[machine],new SortByStartTime(schedule)) ;
+
+
+            Arrays.sort(tasks[machine], Comparator.comparingInt(t -> schedule.startTime(t.job, t.task))) ;
+
 
             this.resources[machine] = tasks[machine] ;
         }

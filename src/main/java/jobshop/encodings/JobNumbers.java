@@ -3,10 +3,11 @@ package jobshop.encodings;
 import jobshop.Encoding;
 import jobshop.Instance;
 import jobshop.Schedule;
-import jobshop.utility.SortByStartTime;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 /** Représentation par numéro de job. */
 public class JobNumbers extends Encoding {
@@ -67,7 +68,8 @@ public class JobNumbers extends Encoding {
             }
         }
 
-        tasks.sort(new SortByStartTime(schedule));
+        // Sort tasks based on start time
+        tasks.sort(Comparator.comparingInt(t -> schedule.startTime(t.job, t.task)));
 
         int[] sortedJobs = tasks.stream().mapToInt( task ->  task.job).toArray() ;
 

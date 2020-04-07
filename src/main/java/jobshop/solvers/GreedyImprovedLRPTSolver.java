@@ -5,7 +5,7 @@ import jobshop.encodings.Task;
 
 import java.util.List;
 
-public class GreedyT_SPTSolver extends GreedySolver {
+public class GreedyImprovedLRPTSolver extends GreedySolver {
 
     @Override
     protected Task getHighestPriorityTask(List<Task> tasks, ResourceOrder resourceOrder, int[][] tasksState) {
@@ -25,12 +25,24 @@ public class GreedyT_SPTSolver extends GreedySolver {
             }
             else if(startTime == currentSmallestStartTime){
 
-                int HPTTaskDuration = resourceOrder.instance.duration(highestPriorityTask.job,highestPriorityTask.task) ;
-                int currentTaskDuration =  resourceOrder.instance.duration(task.job,task.task) ;
+                int RPT = 0 ;
+                int HPT_RPT = 0 ;
 
-                if(currentTaskDuration < HPTTaskDuration){
-                    currentSmallestStartTime = startTime ;
+                // Calculate time remaining for current task job and HPT job
+                for(int t = 0 ; t < resourceOrder.instance.numTasks ; t++){
+
+                    if(tasksState[task.job][t] == -1){
+                        RPT += resourceOrder.instance.duration(task.job,t) ;
+                    }
+
+                    if(tasksState[highestPriorityTask.job][t] == -1){
+                        HPT_RPT += resourceOrder.instance.duration(highestPriorityTask.job,t) ;
+                    }
+                }
+
+                if(RPT > HPT_RPT){
                     highestPriorityTask = task ;
+                    currentSmallestStartTime = startTime ;
                 }
             }
 
