@@ -5,7 +5,7 @@ import jobshop.encodings.Task;
 
 import java.util.List;
 
-public class GreedyImprovedLRPTSolver extends GreedySolver {
+public class GreedyESTLRPTSolver extends GreedySolver {
 
     @Override
     protected Task getHighestPriorityTask(List<Task> tasks, ResourceOrder resourceOrder, int[][] tasksState) {
