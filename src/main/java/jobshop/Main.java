@@ -28,8 +28,9 @@ public class Main {
         solvers.put("LPT",new GreedyLPTSolver());
         solvers.put("LRPT",new GreedyLRPTSolver());
         solvers.put("SRPT",new GreedySRPTSolver());
-        solvers.put("EST_SPT",new GreedyImprovedSPTSolver());
+        solvers.put("EST_SPT",new GreedyESTSPTSolver());
         solvers.put("EST_LRPT",new GreedyESTLRPTSolver());
+        solvers.put("descent",new DescentSolver());
         // add new solvers here
     }
 

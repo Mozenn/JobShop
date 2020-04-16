@@ -2,9 +2,12 @@ package jobshop.solvers;
 
 import jobshop.Instance;
 import jobshop.Result;
+import jobshop.Schedule;
 import jobshop.Solver;
 import jobshop.encodings.ResourceOrder;
+import jobshop.encodings.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DescentSolver implements Solver {
@@ -67,24 +70,127 @@ public class DescentSolver implements Solver {
 
         /** Apply this swap on the given resource order, transforming it into a new solution. */
         public void applyOn(ResourceOrder order) {
-            throw new UnsupportedOperationException();
+
+            Task temp = order.resources[this.machine][this.t1] ;
+            order.resources[this.machine][this.t1] = order.resources[this.machine][this.t2] ;
+            order.resources[this.machine][this.t2] =  temp ;
         }
     }
 
 
     @Override
     public Result solve(Instance instance, long deadline) {
-        throw new UnsupportedOperationException();
+
+        long startTime = System.currentTimeMillis();
+
+        Solver solver = new GreedyLRPTSolver() ;
+        Schedule bestSchedule  = solver.solve(instance,deadline).schedule ;
+        Schedule bestTempSchedule = bestSchedule  ;
+
+        boolean end = false ;
+
+        while(!end && (System.currentTimeMillis() - startTime < deadline)){
+
+            ResourceOrder currentOrder = new ResourceOrder(bestSchedule) ;
+
+            List<ResourceOrder> neighbors = getNeighbors(currentOrder) ;
+
+            // Get best neighbor
+            Schedule bestNeighbor = null  ;
+            int minDuration = Integer.MAX_VALUE ;
+
+            for(ResourceOrder neighbor : neighbors){
+
+                Schedule schedule = neighbor.toSchedule() ;
+
+                if(schedule.makespan() < minDuration){
+
+                    bestNeighbor = schedule ;
+                    minDuration = schedule.makespan() ;
+                }
+            }
+
+            if(bestNeighbor.makespan() < bestSchedule.makespan()){
+                bestSchedule = bestNeighbor ;
+            }
+            else{
+                end = true ;
+            }
+
+        }
+
+        return new Result(instance,bestSchedule,Result.ExitCause.Timeout);
+    }
+
+    public List<ResourceOrder> getNeighbors(ResourceOrder order){
+
+        ArrayList<ResourceOrder> result = new ArrayList<>() ;
+
+        List<Block> blocks = blocksOfCriticalPath(order) ;
+
+        for(Block block : blocks){
+
+            List<Swap> swaps = neighbors(block) ;
+
+            for(Swap swap : swaps){
+
+                ResourceOrder newOrder = order.copy() ;
+
+                swap.applyOn(newOrder);
+
+                result.add(newOrder) ;
+            }
+        }
+
+        return result ;
     }
 
     /** Returns a list of all blocks of the critical path. */
     List<Block> blocksOfCriticalPath(ResourceOrder order) {
-        throw new UnsupportedOperationException();
+
+        ArrayList<Block> blocks = new ArrayList<Block>() ;
+        Schedule schedule = order.toSchedule() ;
+
+        List<Task> criticalPath = schedule.criticalPath() ;
+
+        int currentMachine = -1;
+        int firstTask = -1 ;
+        int lastTask = -1 ;
+
+        for(Task task : criticalPath){
+
+            if(schedule.pb.machine(task) == currentMachine){
+                lastTask = order.getIndex(task) ;//TODO check return value (use exception ? )
+            }
+            else{
+                if(lastTask != firstTask){
+                    blocks.add(new Block(currentMachine,firstTask,lastTask)) ;
+                }
+
+                currentMachine = schedule.pb.machine(task) ;
+                firstTask = order.getIndex(task) ; //TODO check return value
+                lastTask = firstTask ;
+            }
+        }
+
+        return blocks ;
     }
 
     /** For a given block, return the possible swaps for the Nowicki and Smutnicki neighborhood */
     List<Swap> neighbors(Block block) {
-        throw new UnsupportedOperationException();
+
+        ArrayList<Swap> swaps = new ArrayList<>() ;
+
+        if(block.lastTask - block.firstTask == 1){ // 2 tasks in block
+
+            swaps.add(new Swap(block.machine,block.firstTask,block.lastTask)) ;
+        }
+        else{
+            swaps.add(new Swap(block.machine,block.firstTask,block.firstTask+1)) ;
+            swaps.add(new Swap(block.machine,block.lastTask-1,block.lastTask)) ;
+        }
+
+        return swaps ;
     }
 
 }

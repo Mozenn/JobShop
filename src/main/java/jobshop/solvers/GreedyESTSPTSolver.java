@@ -5,7 +5,7 @@ import jobshop.encodings.Task;
 
 import java.util.List;
 
-public class GreedyImprovedSPTSolver extends GreedySolver {
+public class GreedyESTSPTSolver extends GreedySolver {
 
     @Override
     protected Task getHighestPriorityTask(List<Task> tasks, ResourceOrder resourceOrder, int[][] tasksState) {
