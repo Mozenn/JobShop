@@ -31,6 +31,7 @@ public class Main {
         solvers.put("EST_SPT",new GreedyESTSPTSolver());
         solvers.put("EST_LRPT",new GreedyESTLRPTSolver());
         solvers.put("descent",new DescentSolver());
+        solvers.put("taboo",new TabooSolver());
         // add new solvers here
     }
 

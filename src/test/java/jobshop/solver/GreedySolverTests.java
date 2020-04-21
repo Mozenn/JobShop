@@ -38,6 +38,7 @@ public class GreedySolverTests {
 
         Result r = greedySolver.solve(instance,1) ;
 
+        System.out.println(r.schedule);
         System.out.println(r.schedule.makespan());
 
         assert true;
