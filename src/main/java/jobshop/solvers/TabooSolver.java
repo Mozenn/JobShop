@@ -95,14 +95,14 @@ public class TabooSolver implements Solver {
 
         long startTime = System.currentTimeMillis();
 
-        Solver solver = new GreedyLRPTSolver() ;
+        Solver solver = new GreedyESTLRPTSolver() ;
         Schedule bestSchedule  = solver.solve(instance,deadline).schedule ;
         Schedule bestTempSchedule = bestSchedule  ;
 
-        final int MAX_ITER = 5 ;
+        final int MAX_ITER = 100 ;
         int iter = 0 ;
 
-        final int TABOO_DURATION = 1 ;
+        final int TABOO_DURATION = 2 ;
         int[][] sTaboo = new int[instance.numTasks*instance.numJobs][instance.numTasks*instance.numJobs] ;
 
         boolean end = false ;

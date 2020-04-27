@@ -83,13 +83,13 @@ public class DescentSolver implements Solver {
 
         long startTime = System.currentTimeMillis();
 
-        Solver solver = new GreedyLRPTSolver() ;
+        Solver solver = new GreedyESTLRPTSolver() ;
         Schedule bestSchedule  = solver.solve(instance,deadline).schedule ;
         Schedule bestTempSchedule = bestSchedule  ;
 
         boolean end = false ;
 
-        while(!end && (System.currentTimeMillis() - startTime < deadline)){
+        while(!end /*&& (System.currentTimeMillis() - startTime < deadline)*/){
 
             ResourceOrder currentOrder = new ResourceOrder(bestSchedule) ;
 
@@ -110,7 +110,7 @@ public class DescentSolver implements Solver {
                 }
             }
 
-            if(bestNeighbor.makespan() < bestSchedule.makespan()){
+            if(bestNeighbor == null  || bestNeighbor.makespan() < bestSchedule.makespan()){
                 bestSchedule = bestNeighbor ;
             }
             else{

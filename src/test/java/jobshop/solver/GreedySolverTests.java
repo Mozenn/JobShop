@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 public class GreedySolverTests {
-/*
+
     @Test
     public void testSRPTSolverValidity1() throws IOException {
 
@@ -21,14 +21,12 @@ public class GreedySolverTests {
 
         Solver greedySolver = new GreedySRPTSolver() ;
 
-        Result r = greedySolver.solve(instance,1) ;
+        Result r = greedySolver.solve(instance,Long.MAX_VALUE) ;
 
-        System.out.println(r.schedule.makespan());
-
-        assert true ;
+        assert r.schedule.isValid() ;
 
     }
-*/
+
     @Test
     public void testSRPTSolverValidity2() throws IOException {
 
@@ -36,15 +34,15 @@ public class GreedySolverTests {
 
         Solver greedySolver = new GreedySRPTSolver() ;
 
-        Result r = greedySolver.solve(instance,1) ;
+        Result r = greedySolver.solve(instance,Long.MAX_VALUE) ;
 
-        System.out.println(r.schedule);
-        System.out.println(r.schedule.makespan());
+//        System.out.println(r.schedule);
+//        System.out.println(r.schedule.makespan());
 
-        assert true;
+        assert r.schedule.isValid();
 
     }
-/*
+
     @Test
     public void testSRPTSolverValidity3() throws IOException {
 
@@ -52,11 +50,9 @@ public class GreedySolverTests {
 
         Solver greedySolver = new GreedySRPTSolver() ;
 
-        Result r = greedySolver.solve(instance,1) ;
+        Result r = greedySolver.solve(instance,Long.MAX_VALUE) ;
 
-        System.out.println(r.schedule.makespan());
-
-        assert true ;
+        assert r.schedule.isValid() ;
 
     }
 
@@ -66,11 +62,9 @@ public class GreedySolverTests {
         Instance instance = Instance.fromFile(Paths.get("instances/aaa1"));
         Solver greedySolver = new GreedyLRPTSolver() ;
 
-        Result r = greedySolver.solve(instance,1) ;
+        Result r = greedySolver.solve(instance,Long.MAX_VALUE) ;
 
-        System.out.println(r.schedule.makespan());
-
-        assert r.schedule.makespan() == 11 ;
+        assert r.schedule.isValid() ;
 
     }
 
@@ -80,13 +74,11 @@ public class GreedySolverTests {
         Instance instance = Instance.fromFile(Paths.get("instances/aaa1"));
         Solver greedySolver = new GreedySPTSolver() ;
 
-        Result r = greedySolver.solve(instance,1) ;
+        Result r = greedySolver.solve(instance,Long.MAX_VALUE) ;
 
-        System.out.println(r.schedule.makespan());
+        assert r.schedule.isValid() ;
 
-        assert r.schedule.makespan() == 16 ;
-
-    } */
+    }
 
     @Test
     public void testSPTSolverValidity2() throws IOException {
@@ -94,26 +86,24 @@ public class GreedySolverTests {
         Instance instance = Instance.fromFile(Paths.get("instances/ft06"));
         Solver greedySolver = new GreedySPTSolver() ;
 
-        Result r = greedySolver.solve(instance,1) ;
+        Result r = greedySolver.solve(instance,Long.MAX_VALUE) ;
 
         System.out.println(r.schedule.makespan());
 
-        assert r.schedule.makespan() == 109 ;
+        assert r.schedule.isValid() ;
 
     }
-    /*
+
     @Test
     public void testSPTSolverValidity3() throws IOException {
 
         Instance instance = Instance.fromFile(Paths.get("instances/ft10"));
         Solver greedySolver = new GreedySPTSolver() ;
 
-        Result r = greedySolver.solve(instance,1) ;
+        Result r = greedySolver.solve(instance,Long.MAX_VALUE) ;
 
-        System.out.println(r.schedule.makespan());
+        assert r.schedule.isValid() ;
 
-        assert true;
-
-    } */
+    }
 
 }
