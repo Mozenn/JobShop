@@ -16,6 +16,8 @@ public class ResourceOrder extends Encoding {
     /* Indicate the current start time for each machine*/
     public int[] nextFreeTimeResource ;
 
+    public int[][] startTimes ;
+
     // for each machine, indicate on many tasks have been initialized
     final int[] nextFreeSlot;
 
@@ -30,6 +32,8 @@ public class ResourceOrder extends Encoding {
 
         nextFreeTimeResource = new int[instance.numMachines];
         Arrays.fill(nextFreeTimeResource,0) ;
+
+        startTimes = new int[instance.numJobs][instance.numTasks];
 
         nextFreeSlot = new int[instance.numMachines];
     }
@@ -66,7 +70,14 @@ public class ResourceOrder extends Encoding {
         for (int rank = 0; rank < resources[machine].length; rank++) {
             if (resources[machine][rank].job == -1) {
                 resources[machine][rank] = task;
-                nextFreeTimeResource[machine] += instance.duration(task.job,task.task);
+
+                int est = task.task == 0 ? 0 : startTimes[task.job][task.task-1] + instance.duration(task.job, task.task-1);
+                est = Math.max(est, this.nextFreeTimeResource[machine]);
+
+                startTimes[task.job][task.task] = est ;
+
+                nextFreeTimeResource[machine] = est + instance.duration(task.job,task.task);
+
                 nextFreeSlot[machine] +=1 ;
                 break;
             }

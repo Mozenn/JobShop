@@ -17,7 +17,9 @@ public class GreedyESTLRPTSolver extends GreedySolver {
 
             int machine = resourceOrder.instance.machine(task.job,task.task) ;
 
-            int startTime = resourceOrder.nextFreeTimeResource[machine] ;
+            int est = task.task == 0 ? 0 : resourceOrder.startTimes[task.job][task.task-1] + resourceOrder.instance.duration(task.job, task.task-1);
+            int startTime = Math.max(est, resourceOrder.nextFreeTimeResource[machine]);
+
 
             if(startTime < currentSmallestStartTime){
                 currentSmallestStartTime = startTime ;

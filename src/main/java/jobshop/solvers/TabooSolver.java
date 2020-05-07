@@ -95,7 +95,7 @@ public class TabooSolver implements Solver {
 
         long startTime = System.currentTimeMillis();
 
-        Solver solver = new GreedyESTLRPTSolver() ;
+        Solver solver = new GreedySPTSolver() ;
         Schedule bestSchedule  = solver.solve(instance,deadline).schedule ;
         Schedule bestTempSchedule = bestSchedule  ;
 

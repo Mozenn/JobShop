@@ -39,7 +39,6 @@ public abstract class GreedySolver implements Solver {
             remainingTasks.remove(task);
             tasksState[task.job][task.task] = 1 ;
 
-
         }
 
         //System.out.println(sol);
