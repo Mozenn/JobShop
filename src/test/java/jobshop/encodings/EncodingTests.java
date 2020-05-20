@@ -89,7 +89,6 @@ public class EncodingTests {
 
 
         Schedule sched = enc.toSchedule();
-        System.out.println(sched);
         assert sched.isValid();
         assert sched.makespan() == 12;
 

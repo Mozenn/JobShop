@@ -89,7 +89,7 @@ public class DescentSolver implements Solver {
 
         boolean end = false ;
 
-        while(!end /*&& (System.currentTimeMillis() - startTime < deadline)*/){
+        while(!end && (System.currentTimeMillis() - startTime < deadline)){
 
             ResourceOrder currentOrder = new ResourceOrder(bestSchedule) ;
 
@@ -110,7 +110,7 @@ public class DescentSolver implements Solver {
                 }
             }
 
-            if(bestNeighbor == null  || bestNeighbor.makespan() < bestSchedule.makespan()){
+            if(bestNeighbor != null  && bestNeighbor.makespan() < bestSchedule.makespan()){
                 bestSchedule = bestNeighbor ;
             }
             else{
@@ -160,7 +160,7 @@ public class DescentSolver implements Solver {
         for(Task task : criticalPath){
 
             if(schedule.pb.machine(task) == currentMachine){
-                lastTask = order.getIndex(task) ;//TODO check return value (use exception ? )
+                lastTask = order.getIndex(task) ;
             }
             else{
                 if(lastTask != firstTask){
@@ -168,7 +168,7 @@ public class DescentSolver implements Solver {
                 }
 
                 currentMachine = schedule.pb.machine(task) ;
-                firstTask = order.getIndex(task) ; //TODO check return value
+                firstTask = order.getIndex(task) ;
                 lastTask = firstTask ;
             }
         }

@@ -17,6 +17,7 @@ public abstract class GreedySolver implements Solver {
 
         ResourceOrder sol = new ResourceOrder(instance) ;
 
+        // keep track of which tasks is completed
         int[][] tasksState = new int[instance.numJobs][instance.numTasks];
 
         for( int[] task : tasksState){
@@ -29,8 +30,6 @@ public abstract class GreedySolver implements Solver {
 
             List<Task> executableTasks = getExecutableTasks(sol,remainingTasks,tasksState) ;
 
-            //System.out.println(executableTasks);
-
             Task task = getHighestPriorityTask(executableTasks,sol,tasksState ) ;
             int machine = instance.machine(task.job,task.task) ;
 
@@ -40,8 +39,6 @@ public abstract class GreedySolver implements Solver {
             tasksState[task.job][task.task] = 1 ;
 
         }
-
-        //System.out.println(sol);
 
         return new Result(instance,sol.toSchedule(),Result.ExitCause.Blocked);
     }

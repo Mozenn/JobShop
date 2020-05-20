@@ -95,14 +95,14 @@ public class TabooSolver implements Solver {
 
         long startTime = System.currentTimeMillis();
 
-        Solver solver = new GreedySPTSolver() ;
+        Solver solver = new GreedyESTLRPTSolver() ;
         Schedule bestSchedule  = solver.solve(instance,deadline).schedule ;
         Schedule bestTempSchedule = bestSchedule  ;
 
-        final int MAX_ITER = 100 ;
+        final int MAX_ITER = 1000 ;
         int iter = 0 ;
 
-        final int TABOO_DURATION = 2 ;
+        final int TABOO_DURATION = 5;
         int[][] sTaboo = new int[instance.numTasks*instance.numJobs][instance.numTasks*instance.numJobs] ;
 
         boolean end = false ;
@@ -187,7 +187,7 @@ public class TabooSolver implements Solver {
         for(Task task : criticalPath){
 
             if(schedule.pb.machine(task) == currentMachine){
-                lastTask = order.getIndex(task) ;//TODO check return value (use exception ? )
+                lastTask = order.getIndex(task) ;
             }
             else{
                 if(lastTask != firstTask){
@@ -195,7 +195,7 @@ public class TabooSolver implements Solver {
                 }
 
                 currentMachine = schedule.pb.machine(task) ;
-                firstTask = order.getIndex(task) ; //TODO check return value
+                firstTask = order.getIndex(task) ;
                 lastTask = firstTask ;
             }
         }

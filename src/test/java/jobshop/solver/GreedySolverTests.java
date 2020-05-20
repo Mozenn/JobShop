@@ -88,8 +88,6 @@ public class GreedySolverTests {
 
         Result r = greedySolver.solve(instance,Long.MAX_VALUE) ;
 
-        System.out.println(r.schedule.makespan());
-
         assert r.schedule.isValid() ;
 
     }

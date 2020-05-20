@@ -154,7 +154,7 @@ public class ResourceOrder extends Encoding {
         for(int m = 0 ; m<schedule.pb.numMachines ; m++) {
             final int machine = m;
 
-            // TODO update nextFreeTimeResource too
+
             // for thi machine, find all tasks that are executed on it and sort them by their start time
             resources[m] =
                     IntStream.range(0, this.instance.numJobs) // all job numbers
@@ -166,26 +166,6 @@ public class ResourceOrder extends Encoding {
             nextFreeSlot[m] = instance.numJobs;
         }
 
-//        Task[][] tasks = new Task[instance.numMachines][instance.numJobs] ;
-//
-//        for(int job = 0 ; job < instance.numJobs ; job++){
-//
-//            for(int task = 0 ; task < instance.numTasks ; task++){
-//
-//                Task currentTask = new Task(job,task) ;
-//
-//                tasks[instance.machine(job,task)][job] = currentTask ;
-//            }
-//        }
-//
-//        for(int machine = 0 ; machine < tasks.length ; machine++){
-//
-//
-//            Arrays.sort(tasks[machine], Comparator.comparingInt(t -> schedule.startTime(t.job, t.task))) ;
-//
-//
-//            this.resources[machine] = tasks[machine] ;
-//        }
     }
 
     /** Creates an exact copy of this resource order. */
